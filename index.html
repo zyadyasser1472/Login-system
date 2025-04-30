@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ============================font===================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<!-- ============================css===================================== -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Login System</title>
+</head>
+<body>
+<header class="d-none">
+    <nav class="navbar navbar-expand-lg pt-4 position-absolute w-100">
+        <div class="container">
+            <a class="navbar-brand" href="#">SMART LOGIN</a>
+            <button class="navbar-btn" id="logOutBtn">Logout</button>
+        </div>
+    </nav>
+</header>
+<main>
+    <div class="container">
+        <div class="system-title">
+            <h1 class="text-center mb-5">Smart Login System</h1>
+        </div>
+        <div class="row justify-content-center align-content-center parent">
+            <div class="login-wrapper d-flex justify-content-center align-content-center flex-wrap" id="form">
+                <div class="input-group-user d-none" id="inputUserName">
+                    <input type="text" id="userName" placeholder="User Name" class="inputs username-input">
+                    <img src="img/user.png" alt="">
+                </div>
+                <div class="input-group-user" id="inputUserEmail">
+                    <input type="text" id="signInEmail" placeholder="Email" class="inputs email-input">
+                    <img src="img/user.png" alt="">
+                </div>
+                <div class="input-group-password" id="inputUserPassword">
+                    <input type="password" id="signInPassword" placeholder="Password" class="inputs password-input">
+                    <img src="img/lock.png" alt="">
+                </div>
+                <div class="input-group-password d-none" id="inputUserRePassword">
+                    <input type="password" id="signUpRePassword" placeholder="RePassword" class="inputs password-input">
+                    <img src="img/lock.png" alt="">
+                </div>
+                <div class="alert d-none" role="alert">
+                    !Please fill out all fields
+                </div>
+                <button class="mb-3 mt-3" id="submitBtn">Login</button>
+                <p>Don’t have an account? <a href="#" id="signUpLink">Sign Up</a></p>
+            </div>
+            <h2 class="text-center d-none">Welcome <span id="welcomeUserName">user</span></h2>
+        </div>
+    </div>
+</main>
+<script src="js/index.js"></script>
+
+
+    <script src="js/index.js"></script>
+</body>
+</html>

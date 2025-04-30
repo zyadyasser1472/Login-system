@@ -1,0 +1,125 @@
+let inputsUser = document.querySelector(".input-group-user.d-none");
+let inputUserRePassword = document.getElementById("inputUserRePassword");
+let submitBtn = document.getElementById("submitBtn");
+let logOutBtn = document.getElementById("logOutBtn")
+let signUpLink = document.getElementById("signUpLink");
+let usernameInput = document.getElementById("userName");
+let emailInput = document.getElementById("signInEmail");
+let passwordInput = document.getElementById("signInPassword");
+let rePasswordInput = document.getElementById("signUpRePassword");
+let siteTitle = document.querySelector("h1");
+let headerSite = document.querySelector("header")
+let welcomeMessage = document.querySelector("h2");
+let welcomeUserName = document.getElementById("welcomeUserName");
+let form = document.getElementById ("form");
+let userNameRegex =/ ^[a-z0-9_-]{3,15}$/;
+let userEmailRegex =/ [^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
+let userPasswordRegex = /^[a-z0-9_-]{3,15}$/;
+let alertDiv = document.querySelector(".alert")
+
+signUpLink.addEventListener("click", function (e){
+    e.preventDefault();
+    isSignupMode = !isSignupMode;
+    if (isSignupMode) {
+        inputsUser.classList.remove("d-none");
+        inputUserRePassword.classList.remove("d-none");
+        submitBtn.textContent = "Sign Up";
+        signUpLink.textContent = "Login";
+    } else {
+        inputsUser.classList.add("d-none");
+        inputUserRePassword.classList.add("d-none");
+        submitBtn.textContent = "Login";
+        signUpLink.textContent = "Sign Up";
+    }
+});
+
+let isSignupMode = false;
+submitBtn.addEventListener("click", function () {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+    
+  if (isSignupMode) {
+    const username = usernameInput.value.trim();
+    const repassword = rePasswordInput.value.trim();
+
+    if (!username || !email || !password || !repassword) {
+      showMessage("Please fill out all fields", "danger"); // ⛔️ أحمر
+      return;
+    }
+
+    if (password !== repassword) {
+      showMessage("The passwords do not match!", "danger"); // ⛔️ أحمر
+      return;
+    }
+
+    showMessage("Account created successfully!", "success");
+    
+    localStorage.setItem("userEmail", email);
+    localStorage.setItem("userPassword", password);
+    localStorage.setItem("userName", username);
+
+    usernameInput.value = "";
+    emailInput.value = "";
+    passwordInput.value = "";
+    rePasswordInput.value = "";
+
+    setTimeout(() => {
+      hideMessage();
+    }, 3000);
+  }else {
+    const savedEmail = localStorage.getItem("userEmail");
+    const savedPassword = localStorage.getItem("userPassword");
+    const savedName = localStorage.getItem("userName");
+
+    if (email === savedEmail && password === savedPassword) {
+      welcomeUserName.textContent = savedName;
+      welcomeMessage.classList.remove("d-none");
+      headerSite.classList.remove("d-none");
+      siteTitle.classList.add("d-none");
+      document.getElementById("form").classList.add("d-none"); // إخفاء الفورم
+      showMessage("");
+    } else {
+      showMessage("Incorrect login credentials", "danger");
+    }
+  }
+});
+
+
+function showMessage(message, type) {
+  alertDiv.innerText = message;
+
+  alertDiv.classList.remove("alert-danger", "alert-success");
+
+  alertDiv.classList.add(`alert-${type}`);
+
+  alertDiv.classList.remove("d-none");
+}
+  function hideMessage() {
+    alertDiv.classList.add("d-none");
+  }
+
+logOutBtn.addEventListener("click", function () {
+    welcomeMessage.classList.add("fade-out");
+    headerSite.classList.add("fade-out");
+  
+    setTimeout(() => {
+      welcomeMessage.classList.add("d-none");
+      headerSite.classList.add("d-none");
+      welcomeMessage.classList.remove("fade-out");
+      headerSite.classList.remove("fade-out");
+      siteTitle.classList.remove("d-none");
+      form.classList.remove("d-none");
+      submitBtn.classList.remove("d-none");
+      signUpLink.textContent = "Sign Up";
+      submitBtn.textContent = "Login";
+      isSignupMode = false;
+      inputsUser.classList.add("d-none");
+      inputUserRePassword.classList.add("d-none");
+      usernameInput.value = "";
+      emailInput.value = "";
+      passwordInput.value = "";
+      rePasswordInput.value = "";
+    }, 500);
+  });
+  
+

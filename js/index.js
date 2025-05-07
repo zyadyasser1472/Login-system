@@ -1,5 +1,6 @@
 let inputsUser = document.querySelector(".input-group-user.d-none");
 let inputUserRePassword = document.getElementById("inputUserRePassword");
+let inputUserName = document.getElementById("inputUserName");
 let submitBtn = document.getElementById("submitBtn");
 let logOutBtn = document.getElementById("logOutBtn")
 let signUpLink = document.getElementById("signUpLink");
@@ -12,8 +13,8 @@ let headerSite = document.querySelector("header")
 let welcomeMessage = document.querySelector("h2");
 let welcomeUserName = document.getElementById("welcomeUserName");
 let form = document.getElementById ("form");
-let userNameRegex =/ ^[a-z0-9_-]{3,15}$/;
-let userEmailRegex =/ [^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
+let userNameRegex =/^[a-z0-9_-]{3,15}$/;
+let userEmailRegex =/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 let userPasswordRegex = /^[a-z0-9_-]{3,15}$/;
 let alertDiv = document.querySelector(".alert")
 
@@ -43,45 +44,76 @@ submitBtn.addEventListener("click", function () {
     const repassword = rePasswordInput.value.trim();
 
     if (!username || !email || !password || !repassword) {
-      showMessage("Please fill out all fields", "danger"); // ⛔️ أحمر
+      showMessage("Please fill out all fields", "danger"); 
       return;
+    }
+    
+    if(!userNameRegex.test(username)){
+        showMessage("username must be 3-15 characters and contain only letters, numbers, _ or -", "danger")
+        return;
+    }
+    
+    if(!userEmailRegex.test(email)){
+        showMessage("invalid email format","danger")
+        return;
+    }
+
+    if(!userPasswordRegex.test(password)){
+        showMessage("Password must be 3-15 characters and contain only letters, numbers, _ or -","danger")
+        return;
     }
 
     if (password !== repassword) {
-      showMessage("The passwords do not match!", "danger"); // ⛔️ أحمر
+      showMessage("The passwords do not match!", "danger"); 
       return;
     }
 
-    showMessage("Account created successfully!", "success");
-    
-    localStorage.setItem("userEmail", email);
-    localStorage.setItem("userPassword", password);
-    localStorage.setItem("userName", username);
+    const users =JSON.parse(localStorage.getItem("users")) || [];
 
+    const existingUser = users.find(user => user.email === email);
+    if (existingUser) {
+        showMessage("This email is already registered!", "danger");
+        return;
+      }
+      users.push({
+        username,
+        email,
+        password
+      });
+
+    localStorage.setItem("users", JSON.stringify(users));
+
+    showMessage("Account created successfully!", "success");
+    isSignupMode = false;
+    submitBtn.textContent = "Login";
+    signUpLink.textContent = "Sign Up";
+    inputUserName.classList.add('d-none')
+    inputUserRePassword.classList.add('d-none')
     usernameInput.value = "";
     emailInput.value = "";
     passwordInput.value = "";
     rePasswordInput.value = "";
-
+    
     setTimeout(() => {
       hideMessage();
     }, 3000);
   }else {
-    const savedEmail = localStorage.getItem("userEmail");
-    const savedPassword = localStorage.getItem("userPassword");
-    const savedName = localStorage.getItem("userName");
+  const users = JSON.parse(localStorage.getItem("users")) || [];
 
-    if (email === savedEmail && password === savedPassword) {
-      welcomeUserName.textContent = savedName;
-      welcomeMessage.classList.remove("d-none");
-      headerSite.classList.remove("d-none");
-      siteTitle.classList.add("d-none");
-      document.getElementById("form").classList.add("d-none"); // إخفاء الفورم
-      showMessage("");
-    } else {
-      showMessage("Incorrect login credentials", "danger");
-    }
+  const foundUser = users.find(user => user.email === email && user.password === password);
+
+  if (foundUser) {
+    welcomeUserName.textContent = foundUser.username;
+    welcomeMessage.classList.remove("d-none");
+    headerSite.classList.remove("d-none");
+    siteTitle.classList.add("d-none");
+    document.getElementById("form").classList.add("d-none"); 
+    showMessage("");
+  } else {
+    showMessage("Incorrect login credentials", "danger");
   }
+}
+
 });
 
 
